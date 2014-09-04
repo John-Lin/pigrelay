@@ -10,8 +10,14 @@ logger = logging.getLogger(__name__)
 SOCKFILE = "/tmp/snort_alert"
 BUFSIZE = 65863
 
-IP = '127.0.0.1'
-PORT = 51234
+
+# Must to set your controller IP here
+CONTROLLER_IP = '127.0.0.1'
+
+# Controller port is 51234 by default.
+# If you want to change the port number
+# you need to set the same port number in the controller application.
+CONTROLLER_PORT = 51234
 
 # TODO: TLS/SSL wrapper for socket
 
@@ -26,7 +32,7 @@ class SnortListener():
         '''Open a client on Network Socket'''
         self.nwsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            self.nwsock.connect((IP, PORT))
+            self.nwsock.connect((CONTROLLER_IP, CONTROLLER_PORT))
         except Exception, e:
             logger.info("Network socket connection error: %s" % e)
             sys.exit(1)
