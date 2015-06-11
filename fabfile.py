@@ -17,5 +17,10 @@ def pigrelay():
 
 
 @task
+def hpigrelay():
+    local('python hpigrelay.py &')
+
+
+@task
 def clean():
     local('rm -rf /tmp/*')
