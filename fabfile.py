@@ -24,3 +24,8 @@ def hpigrelay():
 @task
 def clean():
     local('rm -rf /tmp/*')
+
+
+@task
+def kill():
+    local("ps -ef | grep 'python hpigrelay.py' | awk '{print $2}' | xargs kill -9")
