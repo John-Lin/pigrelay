@@ -13,7 +13,7 @@ SOCKFILE = "/tmp/snort_alert"
 BUFSIZE = 65863
 
 # Must to set your controller IP here
-CONTROLLER_IP = '127.0.0.1'
+CONTROLLER_IP = '192.168.2.242'
 
 # Controller port is 51234 by default.
 # If you want to change the port number
@@ -36,8 +36,8 @@ class SnortListener():
 
     def recv_loop_producer(self, out_q):
         while True:
-            data = self.unsock.recv(BUFSIZE)
             time.sleep(0.01)
+            data = self.unsock.recv(BUFSIZE)
             if data:
                 logger.debug("Send {0} bytes of data.".format
                              (sys.getsizeof(data)))
@@ -62,6 +62,7 @@ class SnortRelay():
         while True:
             data = in_q.get()
             self.nwsock.sendall(data)
+            time.sleep(0.01)
             logger.info("Send the alert messages to Ryu.")
 
 
@@ -78,3 +79,6 @@ if __name__ == '__main__':
 
     t1.start()
     t2.start()
+
+    while True:
+        time.sleep(1)
