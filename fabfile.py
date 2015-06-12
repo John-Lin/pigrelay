@@ -17,15 +17,25 @@ def pigrelay():
 
 
 @task
-def hpigrelay():
-    local('python hpigrelay.py &')
+def hpigrelay_start():
+    local('python hpigrelay.py start')
+
+
+@task
+def hpigrelay_stop():
+    local('python hpigrelay.py stop')
+
+
+@task
+def hpigrelay_restart():
+    local('python hpigrelay.py restart')
 
 
 @task
 def clean():
-    local('rm -rf /tmp/*')
+    local('rm -rf /tmp/snort_alert')
 
 
 @task
-def kill():
+def kill_pigrelay():
     local("ps -ef | grep 'python hpigrelay.py' | awk '{print $2}' | xargs kill -9")
