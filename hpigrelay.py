@@ -6,6 +6,8 @@ import logging
 from Queue import Queue
 from threading import Thread
 
+from daemon import Daemon
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -56,6 +58,7 @@ class SnortRelay():
         except Exception, e:
             logger.info("Network socket connection error: %s" % e)
             sys.exit()
+        logger.info("Network socket sending...")
         self.send_loop_consumer(in_q)
 
     def send_loop_consumer(self, in_q):
@@ -66,19 +69,39 @@ class SnortRelay():
             logger.info("Send the alert messages to Ryu.")
 
 
+class PigrelayDaemon(Daemon):
+    def run(self):
+        # Create the shared queue and launch both threads
+        q = Queue()
+        listener = SnortListener()
+        relay = SnortRelay()
+
+        t1 = Thread(target=listener.start_recv, args=(q,))
+        t1.daemon = True
+        t2 = Thread(target=relay.start_send, args=(q,))
+        t2.daemon = True
+
+        t1.start()
+        t2.start()
+
+        while True:
+            time.sleep(1)
+
+
 if __name__ == '__main__':
-    # Create the shared queue and launch both threads
-    q = Queue()
-    listener = SnortListener()
-    relay = SnortRelay()
-
-    t1 = Thread(target=listener.start_recv, args=(q,))
-    t1.daemon = True
-    t2 = Thread(target=relay.start_send, args=(q,))
-    t2.daemon = True
-
-    t1.start()
-    t2.start()
-
-    while True:
-        time.sleep(1)
+    daemon = PigrelayDaemon('/tmp/daemon.pid')
+    # daemon.run()
+    if len(sys.argv) == 2:
+        if 'start' == sys.argv[1]:
+            daemon.start()
+        elif 'stop' == sys.argv[1]:
+            daemon.stop()
+        elif 'restart' == sys.argv[1]:
+            daemon.restart()
+        else:
+            print "Unknown command"
+            sys.exit(2)
+            sys.exit(0)
+    else:
+        print "usage: %s start|stop|restart" % sys.argv[0]
+        sys.exit(2)
