@@ -7,20 +7,10 @@ from Queue import Queue
 from threading import Thread
 
 from daemon import Daemon
+from settings import CONTROLLER_IP, CONTROLLER_PORT, SOCKFILE, BUFSIZE
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-SOCKFILE = "/tmp/snort_alert"
-BUFSIZE = 65863
-
-# Must to set your controller IP here
-CONTROLLER_IP = '192.168.2.242'
-
-# Controller port is 51234 by default.
-# If you want to change the port number
-# you need to set the same port number in the controller application.
-CONTROLLER_PORT = 51234
 
 
 class SnortListener():
