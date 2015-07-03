@@ -7,27 +7,17 @@ def snort_unsock():
 
 
 @task
-def snort_console():
-    local('snort -i em1 -c /etc/snort/etc/snort.conf -A console')
-
-
-@task
-def pigrelay():
-    local('python pigrelay.py &')
-
-
-@task
-def hpigrelay_start():
+def start():
     local('python hpigrelay.py start')
 
 
 @task
-def hpigrelay_stop():
+def stop():
     local('python hpigrelay.py stop')
 
 
 @task
-def hpigrelay_restart():
+def restart():
     local('python hpigrelay.py restart')
 
 
@@ -37,5 +27,5 @@ def clean():
 
 
 @task
-def kill_pigrelay():
+def kill():
     local("ps -ef | grep 'python hpigrelay.py' | awk '{print $2}' | xargs kill -9")
