@@ -52,7 +52,7 @@ class SimpleTap(app_manager.RyuApp):
 
         self.monitor_ab = 14
 
-        socket_config = {'unixsock': True}
+        socket_config = {'unixsock': False}
 
         self.snort.set_config(socket_config)
         self.snort.start_socket_server()
