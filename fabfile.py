@@ -2,7 +2,8 @@ from fabric.api import task, local
 
 
 @task
-def snort_unsock():
+def snort():
+    local('python hpigrelay.py start')
     local('snort -i em1 -A unsock -l /tmp -c /etc/snort/etc/snort.conf')
 
 
