@@ -8,6 +8,12 @@ def snort():
 
 
 @task
+def snort_restart():
+    local('python hpigrelay.py restart')
+    local('snort -i em1 -A unsock -l /tmp -c /etc/snort/etc/snort.conf')
+
+
+@task
 def start():
     local('python hpigrelay.py start')
 
